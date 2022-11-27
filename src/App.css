@@ -18,9 +18,13 @@ body {
   background: #212626;
   color: #fafafa;
   font-size: 14px;
-  height: 100vh;
   overflow-x: hidden;
   margin: 1rem;
+}
+
+pre {
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 span.market-px {

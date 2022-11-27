@@ -107,14 +107,14 @@ export const startRTC = async (opts: StartOpts) => {
 
   const peer = createWebRTCPeerConnection(opts);
 
-  const data = peer.createDataChannel('marketPx', {ordered: true});
+  const dataChannel = peer.createDataChannel('marketPx', {ordered: true});
   if (onClose) {
-    data.onclose = onClose;
+    dataChannel.onclose = onClose;
   }
   if (onOpen) {
-    data.onopen = onOpen;
+    dataChannel.onopen = onOpen;
   }
-  data.onmessage = onMessage;
+  dataChannel.onmessage = onMessage;
 
   await negotiate({peer, ...opts});
 }

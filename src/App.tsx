@@ -69,9 +69,9 @@ const App = () => {
       </div>
       <hr/>
       <h4>Offer SDP</h4>
-      <div>{offerSDP}</div>
+      <pre>{offerSDP}</pre>
       <h4>Answer SDP</h4>
-      <div>{answerSDP}</div>
+      <pre>{answerSDP}</pre>
     </>
   );
 }
