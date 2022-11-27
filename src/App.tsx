@@ -49,6 +49,8 @@ const App = () => {
     }).catch(alert);
   }, []);
 
+  const revInfo = lastUpdatedInfo.slice().reverse();
+
   return (
     <>
       <div>
@@ -61,9 +63,16 @@ const App = () => {
         }
         <p>Last updated:</p>
         <ul>
-          {lastUpdatedInfo.slice().reverse().map(({epoch, data}) => (
-            <li key={`${epoch}${data}`}>{new Date(epoch).toISOString()}&nbsp;-&nbsp;{data}</li>
-          ))}
+          {revInfo.map(({epoch, data}, idx) => {
+            const prev = revInfo[idx + 1];
+            const diff = prev && (epoch - prev.epoch) / 1000;
+
+            return (
+              <li key={`${epoch}${data}`}>
+                {new Date(epoch).toISOString()}&nbsp;{diff && `(${diff.toFixed(3)})`}&nbsp;-&nbsp;{data}
+              </li>
+            );
+          })}
         </ul>
       </div>
       <hr/>
