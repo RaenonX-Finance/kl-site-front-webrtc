@@ -53,7 +53,10 @@ const App = () => {
 
   const revInfo = lastUpdatedInfo.slice().reverse();
 
-  document.title = `NQ: ${currentPx['NQ']}`;
+  document.title = Object
+    .entries(currentPx)
+    .map(([security, px]) => `${security} ${px}`)
+    .join(' ');
 
   return (
     <>
