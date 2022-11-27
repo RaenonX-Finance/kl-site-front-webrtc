@@ -4,7 +4,7 @@ import {startRTC} from './webrtc';
 
 type State = {
   currentPx: Record<string, number>,
-  lastUpdatedEpoch: number[],
+  lastUpdatedInfo: string[],
   iceGather: string | null,
   iceConnection: string | null,
   signal: string | null,
@@ -15,23 +15,27 @@ type State = {
 const App = () => {
   const [state, setState] = React.useState<State>({
     currentPx: {},
-    lastUpdatedEpoch: [],
+    lastUpdatedInfo: [],
     iceGather: null,
     iceConnection: null,
     signal: null,
     offerSDP: null,
     answerSDP: null,
   });
-  const {currentPx, lastUpdatedEpoch, iceGather, iceConnection, signal, offerSDP, answerSDP} = state;
+  const {currentPx, lastUpdatedInfo, iceGather, iceConnection, signal, offerSDP, answerSDP} = state;
 
   React.useEffect(() => {
     startRTC({
       offerURL: process.env.REACT_APP_OFFER_PATH || 'http://localhost:8182/offer',
-      onMessage: (e: MessageEvent) => setState((state) => ({
-        ...state,
-        currentNQ: e.data,
-        lastUpdatedEpoch: [...state.lastUpdatedEpoch, Date.now() / 1000].slice(-10),
-      })),
+      onMessage: (e: MessageEvent) => setState((state) => {
+        const [security, px] = e.data.split(' ', 2);
+
+        return {
+          ...state,
+          currentPx: {...state.currentPx, [security]: px},
+          lastUpdatedInfo: [...state.lastUpdatedInfo, `${Date.now() / 1000} - ${e.data}`].slice(-10),
+        }
+      }),
       onICEGatherChange: (newVal) => setState((state) => ({...state, iceGather: newVal})),
       onICEConnectionChange: (newVal) => setState((state) => ({...state, iceConnection: newVal})),
       onSignalStateChange: (newVal) => setState((state) => ({...state, signal: newVal})),
@@ -52,7 +56,7 @@ const App = () => {
         }
         <p>Last updated:</p>
         <ul>
-          {lastUpdatedEpoch.reverse().map((lastUpdated) => (
+          {lastUpdatedInfo.reverse().map((lastUpdated) => (
             <li key={lastUpdated}>{new Date(lastUpdated).toString()}</li>
           ))}
         </ul>
