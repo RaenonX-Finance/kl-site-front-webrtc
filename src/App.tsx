@@ -37,7 +37,7 @@ const App = () => {
       onSignalStateChange: (newVal) => setState((state) => ({...state, signal: newVal})),
       onShowOfferSDP: (newVal) => setState((state) => ({...state, offerSDP: newVal})),
       onShowAnswerSDP: (newVal) => setState((state) => ({...state, answerSDP: newVal})),
-    });
+    }).catch(alert);
   }, []);
 
   return (
