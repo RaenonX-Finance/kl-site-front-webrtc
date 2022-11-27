@@ -33,7 +33,7 @@ const App = () => {
         return {
           ...state,
           currentPx: {...state.currentPx, [security]: px},
-          lastUpdatedInfo: [...state.lastUpdatedInfo, `${Date.now() / 1000} - ${e.data}`].slice(-10),
+          lastUpdatedInfo: [...state.lastUpdatedInfo, `${new Date(Date.now())} - ${e.data}`].slice(-10),
         }
       }),
       onICEGatherChange: (newVal) => setState((state) => ({...state, iceGather: newVal})),
@@ -57,7 +57,7 @@ const App = () => {
         <p>Last updated:</p>
         <ul>
           {lastUpdatedInfo.reverse().map((lastUpdated) => (
-            <li key={lastUpdated}>{new Date(lastUpdated).toString()}</li>
+            <li key={lastUpdated}>{lastUpdated}</li>
           ))}
         </ul>
       </div>
