@@ -2,9 +2,14 @@ import React from 'react';
 import './App.css';
 import {startRTC} from './webrtc';
 
+type UpdateInfo = {
+  epoch: number,
+  data: string,
+}
+
 type State = {
   currentPx: Record<string, number>,
-  lastUpdatedInfo: string[],
+  lastUpdatedInfo: UpdateInfo[],
   iceGather: string | null,
   iceConnection: string | null,
   signal: string | null,
@@ -33,7 +38,7 @@ const App = () => {
         return {
           ...state,
           currentPx: {...state.currentPx, [security]: px},
-          lastUpdatedInfo: [...state.lastUpdatedInfo, `${new Date(Date.now())} - ${e.data}`].slice(-10),
+          lastUpdatedInfo: [...state.lastUpdatedInfo, {epoch: Date.now(), data: e.data}].slice(-10),
         }
       }),
       onICEGatherChange: (newVal) => setState((state) => ({...state, iceGather: newVal})),
@@ -56,8 +61,8 @@ const App = () => {
         }
         <p>Last updated:</p>
         <ul>
-          {lastUpdatedInfo.reverse().map((lastUpdated) => (
-            <li key={lastUpdated}>{lastUpdated}</li>
+          {lastUpdatedInfo.slice().reverse().map(({epoch, data}) => (
+            <li key={`${epoch}${data}`}>{new Date(epoch).toISOString()}&nbsp;-&nbsp;{data}</li>
           ))}
         </ul>
       </div>
