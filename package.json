@@ -20,6 +20,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:prod": "SET \"REACT_APP_OFFER_PATH=https://webrtc-data.kl-law.net/offer\" && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prod": "serve -s build -l 4142"

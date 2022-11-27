@@ -76,6 +76,8 @@ export const negotiate = async ({
     onShowOfferSDP(peer.localDescription?.sdp || '(Unavailable)');
   }
 
+  console.log(`Getting answer from ${offerURL}`);
+
   const answer = await (await fetch(offerURL, {
     body: JSON.stringify({
       sdp: offer.sdp,

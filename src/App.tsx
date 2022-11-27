@@ -26,7 +26,7 @@ const App = () => {
 
   React.useEffect(() => {
     startRTC({
-      offerURL: 'http://localhost:8182/offer',
+      offerURL: process.env.REACT_APP_OFFER_PATH || 'http://localhost:8182/offer',
       onMessage: (e: MessageEvent) => setState((state) => ({
         ...state,
         currentNQ: e.data,
