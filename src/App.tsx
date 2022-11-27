@@ -53,6 +53,8 @@ const App = () => {
 
   const revInfo = lastUpdatedInfo.slice().reverse();
 
+  document.title = `NQ: ${currentPx['NQ']}`;
+
   return (
     <>
       <div>
