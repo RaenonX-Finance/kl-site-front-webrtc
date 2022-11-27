@@ -17,6 +17,8 @@ type State = {
   answerSDP: string | null,
 };
 
+const LAST_UPDATE_COUNT = 15;
+
 const App = () => {
   const [state, setState] = React.useState<State>({
     currentPx: {},
@@ -38,7 +40,7 @@ const App = () => {
         return {
           ...state,
           currentPx: {...state.currentPx, [security]: px},
-          lastUpdatedInfo: [...state.lastUpdatedInfo, {epoch: Date.now(), data: e.data}].slice(-10),
+          lastUpdatedInfo: [...state.lastUpdatedInfo, {epoch: Date.now(), data: e.data}].slice(-LAST_UPDATE_COUNT - 1),
         }
       }),
       onICEGatherChange: (newVal) => setState((state) => ({...state, iceGather: newVal})),
@@ -64,6 +66,10 @@ const App = () => {
         <p>Last updated:</p>
         <ul>
           {revInfo.map(({epoch, data}, idx) => {
+            if (idx >= LAST_UPDATE_COUNT) {
+              return <></>;
+            }
+
             const prev = revInfo[idx + 1];
             const diff = prev && (epoch - prev.epoch) / 1000;
 
