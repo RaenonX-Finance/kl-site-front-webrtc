@@ -27,6 +27,11 @@ pre {
   overflow-y: auto;
 }
 
+ul.last-update {
+  max-height: 20rem;
+  overflow-y: scroll;
+}
+
 span.market-px {
   font-size: 2rem;
 }

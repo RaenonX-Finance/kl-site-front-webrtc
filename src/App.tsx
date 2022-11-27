@@ -17,7 +17,7 @@ type State = {
   answerSDP: string | null,
 };
 
-const LAST_UPDATE_COUNT = 15;
+const LAST_UPDATE_COUNT = 150;
 
 const App = () => {
   const [state, setState] = React.useState<State>({
@@ -64,7 +64,7 @@ const App = () => {
             '(No px data available)'
         }
         <p>Last updated:</p>
-        <ul>
+        <ul className="last-update">
           {revInfo.map(({epoch, data}, idx) => {
             if (idx >= LAST_UPDATE_COUNT) {
               return <></>;
