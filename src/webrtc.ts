@@ -72,16 +72,22 @@ export const negotiate = async ({
     }
   })
 
+  const localDesc = peer.localDescription;
+
+  if (!localDesc) {
+    throw new Error('No local peer description');
+  }
+
   if (onShowOfferSDP) {
-    onShowOfferSDP(peer.localDescription?.sdp || '(Unavailable)');
+    onShowOfferSDP(localDesc.sdp || '(Unavailable)');
   }
 
   console.log(`Getting answer from ${offerURL}`);
 
   const answer = await (await fetch(offerURL, {
     body: JSON.stringify({
-      sdp: offer.sdp,
-      type: offer.type,
+      sdp: localDesc.sdp,
+      type: localDesc.type,
     }),
     headers: {
       'Content-Type': 'application/json'
@@ -97,8 +103,8 @@ export const negotiate = async ({
 }
 
 type StartOpts = CreateWebRTCPeerOptions & Omit<NegotiateOpts, 'peer'> & {
-  onClose?: () => void,
-  onOpen?: () => void,
+  onClose?: (dataCh: RTCDataChannel) => () => void,
+  onOpen?: (dataCh: RTCDataChannel) => () => void,
   onMessage: (e: MessageEvent) => void,
 };
 
@@ -109,10 +115,10 @@ export const startRTC = async (opts: StartOpts) => {
 
   const dataChannel = peer.createDataChannel('marketPx', {ordered: true});
   if (onClose) {
-    dataChannel.onclose = onClose;
+    dataChannel.onclose = onClose(dataChannel);
   }
   if (onOpen) {
-    dataChannel.onopen = onOpen;
+    dataChannel.onopen = onOpen(dataChannel);
   }
   dataChannel.onmessage = onMessage;
 
