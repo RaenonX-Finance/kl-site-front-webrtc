@@ -3,7 +3,7 @@ import './App.css';
 import {startRTC} from './webrtc';
 
 type State = {
-  currentNQ: number | null,
+  currentPx: Record<string, number>,
   lastUpdatedEpoch: number[],
   iceGather: string | null,
   iceConnection: string | null,
@@ -14,7 +14,7 @@ type State = {
 
 const App = () => {
   const [state, setState] = React.useState<State>({
-    currentNQ: null,
+    currentPx: {},
     lastUpdatedEpoch: [],
     iceGather: null,
     iceConnection: null,
@@ -22,7 +22,7 @@ const App = () => {
     offerSDP: null,
     answerSDP: null,
   });
-  const {currentNQ, lastUpdatedEpoch, iceGather, iceConnection, signal, offerSDP, answerSDP} = state;
+  const {currentPx, lastUpdatedEpoch, iceGather, iceConnection, signal, offerSDP, answerSDP} = state;
 
   React.useEffect(() => {
     startRTC({
@@ -43,7 +43,13 @@ const App = () => {
   return (
     <>
       <div>
-        <p>Current NQ: <span className="market-px">{currentNQ || '(Unavailable)'}</span></p>
+        {
+          Object.keys(currentPx).length ?
+            Object.entries(currentPx).map(([security, px]) => (
+              <p>Current {security}: <span className="market-px">{px}</span></p>
+            )) :
+            '(No px data available)'
+        }
         <p>Last updated:</p>
         <ul>
           {lastUpdatedEpoch.reverse().map((lastUpdated) => (
