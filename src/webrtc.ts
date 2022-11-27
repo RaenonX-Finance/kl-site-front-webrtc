@@ -9,7 +9,9 @@ export const createWebRTCPeerConnection = ({
   onICEConnectionChange,
   onICEGatherChange
 }: CreateWebRTCPeerOptions): RTCPeerConnection => {
-  const pc = new RTCPeerConnection();
+  const pc = new RTCPeerConnection({
+    iceServers: [{urls: ['stun:stun.l.google.com:19302']}],
+  });
 
   // register some listeners to help debugging
   pc.addEventListener('icegatheringstatechange', () => {
